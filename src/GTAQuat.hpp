@@ -14,10 +14,11 @@ class GTAQuat
 {
 public:
 	GTAQuat();
-	GTAQuat(float x, float y, float z);
+	GTAQuat(double w, double x, double y, double z);
+	GTAQuat(double x, double y, double z);
 	GTAQuat(vec3 degrees);
 
 	vec3 ToEuler() const;
 
-	float w, x, y, z;
+	double w, x, y, z;
 };
