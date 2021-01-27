@@ -10,6 +10,12 @@ using glm::vec3;
 // See this issue for more information: https://github.com/openmultiplayer/open.mp/issues/143
 // See this link for an explanation of the formulas: https://math.stackexchange.com/questions/1477926/quaternion-to-euler-with-some-properties
 
+
+namespace GTAQuatConfig
+{
+	static float epsilon = 0.0f; // epsilon value to use in comparisons, let users override it
+}
+
 class GTAQuat
 {
 public:
