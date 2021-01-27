@@ -62,8 +62,8 @@ int main(int argc, char **argv)
 	GTAQuat c(b);
 	vec3 d = c.ToEuler();
 
-	float quat_diff = abs(a.w - c.w) + abs(a.x - c.x) + abs(a.y - c.y) + abs(a.z - c.z);
-	float vec_diff = abs(b.x - d.x) + abs(b.y - d.y) + abs(b.z - d.z);
+	float quat_diff = glm::abs(a.w - c.w) + glm::abs(a.x - c.x) + glm::abs(a.y - c.y) + glm::abs(a.z - c.z);
+	float vec_diff = glm::abs(b.x - d.x) + glm::abs(b.y - d.y) + glm::abs(b.z - d.z);
 
 	cout << qw << " " << qx << " " << qy << " " << qz << endl;
 	cout << epsilon << endl;
