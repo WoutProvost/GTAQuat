@@ -31,20 +31,17 @@ GTAQuat::GTAQuat(vec3 degrees)
 
 vec3 GTAQuat::ToEuler() const
 {
-	float epsilon = 0.00000202655792236328125f;
-	// float epsilon = glm::epsilon<float>();
-	// float epsilon = 0.0f;
 	float temp = 2 * y * z - 2 * x * w;
 
 	float rx, ry, rz;
 
-	if (temp >= 1.0f - epsilon)
+	if (temp >= 1.0f - GTAQuatConfig::epsilon)
 	{
 		rx = 90.0f;
 		ry = -degrees(atan2(clamp(y, -1.0f, 1.0f), clamp(w, -1.0f, 1.0f)));
 		rz = -degrees(atan2(clamp(z, -1.0f, 1.0f), clamp(w, -1.0f, 1.0f)));
 	}
-	else if (-temp >= 1.0f - epsilon)
+	else if (-temp >= 1.0f - GTAQuatConfig::epsilon)
 	{
 		rx = -90.0f;
 		ry = -degrees(atan2(clamp(y, -1.0f, 1.0f), clamp(w, -1.0f, 1.0f)));

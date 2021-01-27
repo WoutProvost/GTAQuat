@@ -5,66 +5,68 @@
 
 using std::cout;
 using std::endl;
+using std::cerr;
 using glm::vec3;
 
-int main()
+/*
+	Epsilon types:
+		0 - zero (default)
+		1 - ieee
+		2 - illidan
+
+	Terminology:
+		A = original quat
+		B = quat_to_euler(A)
+		C = euler_to_quat(B)
+		D = quat_to_euler(C)
+
+	Output:
+		1. original quat A
+		2. epsilon value used
+		3. space separated differences between A<->C, B<->D
+*/
+
+int main(int argc, char **argv)
 {
-	// {
-	// 	glm::quat q(glm::radians(vec3(30.0f, 40.0f, 50.0f)));
-	// 	vec3 v(glm::degrees(eulerAngles(q)));
-	// 	cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-	// 	cout << v.x << " " << v.y << " " << v.z << endl;
-	// 	cout << endl;
-	// }
-
-	// {
-	// 	GTAQuat q(vec3(30.0f, 40.0f, 50.0f));
-	// 	vec3 v = q.ToEuler();
-	// 	cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-	// 	cout << v.x << " " << v.y << " " << v.z << endl;
-	// 	cout << endl;
-	// }
-
-	// {
-	// 	GTAQuat q(-0.237544f, -0.237661f, 0.665970f, -0.666012f);
-	// 	vec3 v = q.ToEuler();
-	// 	cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-	// 	cout << v.x << " " << v.y << " " << v.z << endl;
-	// 	cout << endl;
-	// }
-
-	// {
-	// 	GTAQuat q(-0.237602f, -0.237603f, 0.665991f, -0.665991f);
-	// 	vec3 v = q.ToEuler();
-	// 	cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-	// 	cout << v.x << " " << v.y << " " << v.z << endl;
-	// 	cout << endl;
-	// }
-
-	// {
-	// 	GTAQuat q(-0.237544f, -0.237661f, 0.665970f, -0.666012f);
-	// 	vec3 v = q.ToEuler();
-	// 	cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-	// 	cout << v.x << " " << v.y << " " << v.z << endl;
-
-	// 	GTAQuat q2(v);
-	// 	cout << "==> " << q2.w << " " << q2.x << " " << q2.y << " " << q2.z << endl;
-	// 	vec3 v2 = q2.ToEuler();
-	// 	cout << "==> " << v2.x << " " << v2.y << " " << v2.z << endl;
-	// 	cout << endl;
-	// }
-
+	
+	if (argc != 6) 
 	{
-		GTAQuat q(-0.237602f, -0.237603f, 0.665991f, -0.665991f);
-		vec3 v = q.ToEuler();
-		cout << q.w << " " << q.x << " " << q.y << " " << q.z << endl;
-		cout << v.x << " " << v.y << " " << v.z << endl;
-
-		GTAQuat q2(v);
-		cout << "==> " << q2.w << " " << q2.x << " " << q2.y << " " << q2.z << endl;
-		vec3 v2 = q2.ToEuler();
-		cout << "==> " << v2.x << " " << v2.y << " " << v2.z << endl;
-		cout << endl;
+		cerr << "Usage: /<name> <qw> <qx> <qy> <qz> <epsilon_type>" << endl;
+		exit(1);
 	}
+
+	float qw = (float)atof(argv[1]);
+	float qx = (float)atof(argv[2]);
+	float qy = (float)atof(argv[3]);
+	float qz = (float)atof(argv[4]);
+	short epsilon = atoi(argv[5]);
+
+	if(epsilon == 1) 
+	{
+		// IEEE
+		GTAQuatConfig::epsilon = glm::epsilon<float>();
+	}
+	else if (epsilon == 2)
+	{
+		// Illidan
+		GTAQuatConfig::epsilon = 0.00000202655792236328125f;
+	}
+	else
+	{
+		// Zero, default
+		GTAQuatConfig::epsilon = 0.0f;
+	}
+
+	GTAQuat a(qw, qx, qy, qz);
+	vec3 b = a.ToEuler();
+	GTAQuat c(b);
+	vec3 d = c.ToEuler();
+
+	float quat_diff = abs(a.w - c.w) + abs(a.x - c.x) + abs(a.y - c.y) + abs(a.z - c.z);
+	float vec_diff = abs(b.x - d.x) + abs(b.y - d.y) + abs(b.z - d.z);
+
+	cout << qw << " " << qx << " " << qy << " " << qz << endl;
+	cout << epsilon << endl;
+	cout << quat_diff << " " << vec_diff << endl;
 	return 0;
 }
