@@ -54,7 +54,7 @@ vec3 GTAQuat::ToEuler() const
 		rz = -degrees(atan2(clamp(x * y + z * w, -1.0f, 1.0f), clamp(0.5f - x * x - z * z, -1.0f, 1.0f)));
 	}
 
-	// Keep each component in the [0.0f, 360.0f] interval
+	// Keep each component in the [0.0f, 360.0f[ interval
 	return vec3(rx, ry, rz);
 	// return mod(vec3(rx, ry, rz), 360.0f);
 }

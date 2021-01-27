@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 		GTAQuatConfig::epsilon = 0.0f;
 	}
 
-	GTAQuat a(qw, qx, qy);
+	GTAQuat a(qw, qx, qy, qz);
 	vec3 b = a.ToEuler();
 	GTAQuat c(b);
 	vec3 d = c.ToEuler();
