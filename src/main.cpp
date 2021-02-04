@@ -8,65 +8,99 @@ using std::endl;
 using std::cerr;
 using glm::vec3;
 
-/*
-	Epsilon types:
-		0 - zero (default)
-		1 - ieee
-		2 - illidan
-
-	Terminology:
-		A = original quat
-		B = quat_to_euler(A)
-		C = euler_to_quat(B)
-		D = quat_to_euler(C)
-
-	Output:
-		1. original quat A
-		2. epsilon value used
-		3. space separated differences between A<->C, B<->D
-*/
-
 int main(int argc, char **argv)
 {
-	
-	if (argc != 6) 
 	{
-		cerr << "Usage: /<name> <qw> <qx> <qy> <qz> <epsilon_type>" << endl;
-		exit(1);
+		GTAQuat a(-0.237544f, -0.237661f, 0.66597f, -0.666012f); a.EPSILON = 0.00000202655792236328125f;
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = 0.00000202655792236328125f;
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = 0.00000202655792236328125f;
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: IllidanS4 -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
 	}
-
-	float qw = (float)atof(argv[1]);
-	float qx = (float)atof(argv[2]);
-	float qy = (float)atof(argv[3]);
-	float qz = (float)atof(argv[4]);
-	short epsilon = atoi(argv[5]);
-
-	if(epsilon == 1) 
 	{
-		// IEEE
-		GTAQuatConfig::epsilon = glm::epsilon<float>();
+		GTAQuat a(-0.237544f, -0.237661f, 0.66597f, -0.666012f); a.EPSILON = glm::epsilon<float>();
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = glm::epsilon<float>();
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = glm::epsilon<float>();
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: machine -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
 	}
-	else if (epsilon == 2)
 	{
-		// Illidan
-		GTAQuatConfig::epsilon = 0.00000202655792236328125f;
+		GTAQuat a(-0.237544f, -0.237661f, 0.66597f, -0.666012f); a.EPSILON = 0.0f;
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = 0.0f;
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = 0.0f;
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: zero -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
+		cout << endl;
 	}
-	else
 	{
-		// Zero, default
-		GTAQuatConfig::epsilon = 0.0f;
+		GTAQuat a(-0.237602f, -0.237603f, 0.665991f, -0.665991f); a.EPSILON = 0.00000202655792236328125f;
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = 0.00000202655792236328125f;
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = 0.00000202655792236328125f;
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: IllidanS4 -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
 	}
-
-	GTAQuat a(qw, qx, qy, qz);
-	vec3 b = a.ToEuler();
-	GTAQuat c(b);
-	vec3 d = c.ToEuler();
-
-	float quat_diff = glm::abs(a.w - c.w) + glm::abs(a.x - c.x) + glm::abs(a.y - c.y) + glm::abs(a.z - c.z);
-	float vec_diff = glm::abs(b.x - d.x) + glm::abs(b.y - d.y) + glm::abs(b.z - d.z);
-
-	cout << qw << " " << qx << " " << qy << " " << qz << endl;
-	cout << epsilon << endl;
-	cout << quat_diff << " " << vec_diff << endl;
+	{
+		GTAQuat a(-0.237602f, -0.237603f, 0.665991f, -0.665991f); a.EPSILON = glm::epsilon<float>();
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = glm::epsilon<float>();
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = glm::epsilon<float>();
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: machine -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
+	}
+	{
+		GTAQuat a(-0.237602f, -0.237603f, 0.665991f, -0.665991f); a.EPSILON = 0.0f;
+		vec3 b = a.ToEuler();
+		GTAQuat c(b); c.EPSILON = 0.0f;
+		vec3 d = c.ToEuler();
+		GTAQuat e(d); e.EPSILON = 0.0f;
+		vec3 f = e.ToEuler();
+		cout << "----- Epsilon: zero -----" << endl;
+		cout << a.w << " " << a.x << " " << a.y << " " << a.z << endl;
+		cout << b.x << " " << b.y << " " << b.z << endl;
+		cout << c.w << " " << c.x << " " << c.y << " " << c.z << endl;
+		cout << d.x << " " << d.y << " " << d.z << endl;
+		cout << e.w << " " << e.x << " " << e.y << " " << e.z << endl;
+		cout << f.x << " " << f.y << " " << f.z << endl;
+		cout << endl;
+	}
 	return 0;
 }
